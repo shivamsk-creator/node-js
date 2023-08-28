@@ -26,8 +26,8 @@ const createContact = asyncHandler(async (req, res) => {
     email,
     phone,
   });
-  res.status(200).json(contact);
-  //   res.status(301).json({ message: "This is your contacts GET API" });
+  // res.status(200).json(contact);
+  res.status(200).json({ message: "Contact has been created", contact });
 });
 
 // @desc GET Single Contact
@@ -63,7 +63,7 @@ const updateContact = asyncHandler(async (req, res) => {
     req.body,
     { new: true }
   );
-  res.status(200).json(updatedContact);
+  res.status(200).json({ message: "Contact has been Updated", updatedContact });
   //   res.status(301).json({ message: "This is your contacts GET API" });
 });
 
@@ -73,13 +73,14 @@ const updateContact = asyncHandler(async (req, res) => {
 
 const deleteContact = asyncHandler(async (req, res) => {
   const contact = await Contact.findById(req.params.id);
-  console.log(contact);
+  console.log("Id", contact._id);
+  console.log("Id from params", req.params.id);
   if (!contact) {
     res.status(404);
     throw new Error("Contact Not Found");
   }
-  Contact.findOneAndDelete({ _id: contact._id });
-  res.status(200).send("Contact Deleted");
+  const response = await Contact.deleteOne({ _id: req.params.id });
+  res.status(200).json({ message: "Contact Deleted", response });
   //   res.status(301).json({ message: "This is your contacts GET API" });
 });
 
